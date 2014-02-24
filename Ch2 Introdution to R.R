@@ -1,4 +1,4 @@
-### vectors, data, matrices, subsetting
+### vectors, data, 
 x=c(2,7,5)
 x
 y=seq(from=4,length=3,by=3)
@@ -11,8 +11,10 @@ x[2]
 x[2:3]
 x[-2]
 x[-c(1,2)]
+#matrices
 z=matrix(seq(1,12),4,3)
 z
+#subsetting
 z[3:4,2:3]
 z[,2:3]
 z[,1]
