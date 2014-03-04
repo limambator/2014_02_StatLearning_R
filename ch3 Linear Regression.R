@@ -1,6 +1,6 @@
 library(MASS)
 library(ISLR)
-### Simple linear regression
+##### Simple linear regression
 names(Boston)
 ?Boston
 plot(medv~lstat,Boston)
@@ -14,7 +14,7 @@ confint(fit1)
 #produce confidence intervals and prediction intervals
 #for the prediction of medv for a given value of lstat
 predict(fit1,data.frame(lstat=c(5,10,15)),interval="confidence")
-### Multiple linear regression
+##### Multiple linear regression
 fit2=lm(medv~lstat+age,data=Boston)
 summary(fit2)
 fit3=lm(medv~.,Boston)
