@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>Model Selection</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+</head>
+
+<body>
+<h1>Model Selection</h1>
+
+<pre><code class="r">library(ISLR)
+summary(Hitters)
+</code></pre>
+
+<pre><code>##      AtBat          Hits         HmRun           Runs      
+##  Min.   : 16   Min.   :  1   Min.   : 0.0   Min.   :  0.0  
+##  1st Qu.:255   1st Qu.: 64   1st Qu.: 4.0   1st Qu.: 30.2  
+##  Median :380   Median : 96   Median : 8.0   Median : 48.0  
+##  Mean   :381   Mean   :101   Mean   :10.8   Mean   : 50.9  
+##  3rd Qu.:512   3rd Qu.:137   3rd Qu.:16.0   3rd Qu.: 69.0  
+##  Max.   :687   Max.   :238   Max.   :40.0   Max.   :130.0  
+##                                                            
+##       RBI            Walks           Years           CAtBat     
+##  Min.   :  0.0   Min.   :  0.0   Min.   : 1.00   Min.   :   19  
+##  1st Qu.: 28.0   1st Qu.: 22.0   1st Qu.: 4.00   1st Qu.:  817  
+##  Median : 44.0   Median : 35.0   Median : 6.00   Median : 1928  
+##  Mean   : 48.0   Mean   : 38.7   Mean   : 7.44   Mean   : 2649  
+##  3rd Qu.: 64.8   3rd Qu.: 53.0   3rd Qu.:11.00   3rd Qu.: 3924  
+##  Max.   :121.0   Max.   :105.0   Max.   :24.00   Max.   :14053  
+##                                                                 
+##      CHits          CHmRun          CRuns           CRBI       
+##  Min.   :   4   Min.   :  0.0   Min.   :   1   Min.   :   0.0  
+##  1st Qu.: 209   1st Qu.: 14.0   1st Qu.: 100   1st Qu.:  88.8  
+##  Median : 508   Median : 37.5   Median : 247   Median : 220.5  
+##  Mean   : 718   Mean   : 69.5   Mean   : 359   Mean   : 330.1  
+##  3rd Qu.:1059   3rd Qu.: 90.0   3rd Qu.: 526   3rd Qu.: 426.2  
+##  Max.   :4256   Max.   :548.0   Max.   :2165   Max.   :1659.0  
+##                                                                
+##      CWalks       League  Division    PutOuts        Assists     
+##  Min.   :   0.0   A:175   E:157    Min.   :   0   Min.   :  0.0  
+##  1st Qu.:  67.2   N:147   W:165    1st Qu.: 109   1st Qu.:  7.0  
+##  Median : 170.5                    Median : 212   Median : 39.5  
+##  Mean   : 260.2                    Mean   : 289   Mean   :106.9  
+##  3rd Qu.: 339.2                    3rd Qu.: 325   3rd Qu.:166.0  
+##  Max.   :1566.0                    Max.   :1378   Max.   :492.0  
+##                                                                  
+##      Errors          Salary       NewLeague
+##  Min.   : 0.00   Min.   :  67.5   A:176    
+##  1st Qu.: 3.00   1st Qu.: 190.0   N:146    
+##  Median : 6.00   Median : 425.0            
+##  Mean   : 8.04   Mean   : 535.9            
+##  3rd Qu.:11.00   3rd Qu.: 750.0            
+##  Max.   :32.00   Max.   :2460.0            
+##                  NA&#39;s   :59
+</code></pre>
+
+<p>There are some missing values here, so before we proceed we will remove them:</p>
+
+<pre><code class="r">Hitters = na.omit(Hitters)
+with(Hitters, sum(is.na(Salary)))
+</code></pre>
+
+<pre><code>## [1] 0
+</code></pre>
+
+<h2>Best Subset regression</h2>
+
+<p>We will now use the package <code>leaps</code> to evaluate all the best-subset models.</p>
+
+<pre><code class="r">library(leaps)
+</code></pre>
+
+<pre><code>## Error: there is no package called &#39;leaps&#39;
+</code></pre>
+
+<pre><code class="r">regfit.full = regsubsets(Salary ~ ., data = Hitters)
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;regsubsets&quot;
+</code></pre>
+
+<pre><code class="r">summary(regfit.full)
+</code></pre>
+
+<pre><code>## Error: object &#39;regfit.full&#39; not found
+</code></pre>
+
+<p>It gives by default best-subsets up to size 8; lets increase that to 19, i.e. all the variables</p>
+
+<pre><code class="r">regfit.full = regsubsets(Salary ~ ., data = Hitters, nvmax = 19)
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;regsubsets&quot;
+</code></pre>
+
+<pre><code class="r">reg.summary = summary(regfit.full)
+</code></pre>
+
+<pre><code>## Error: object &#39;regfit.full&#39; not found
+</code></pre>
+
+<pre><code class="r">names(reg.summary)
+</code></pre>
+
+<pre><code>## Error: object &#39;reg.summary&#39; not found
+</code></pre>
+
+<pre><code class="r">plot(reg.summary$cp, xlab = &quot;Number of Variables&quot;, ylab = &quot;Cp&quot;)
+</code></pre>
+
+<pre><code>## Error: object &#39;reg.summary&#39; not found
+</code></pre>
+
+<pre><code class="r">which.min(reg.summary$cp)
+</code></pre>
+
+<pre><code>## Error: object &#39;reg.summary&#39; not found
+</code></pre>
+
+<pre><code class="r">points(10, reg.summary$cp[10], pch = 20, col = &quot;red&quot;)
+</code></pre>
+
+<pre><code>## Error: object &#39;reg.summary&#39; not found
+</code></pre>
+
+<p>There is a plot method for the <code>regsubsets</code>  object</p>
+
+<pre><code class="r">plot(regfit.full, scale = &quot;Cp&quot;)
+</code></pre>
+
+<pre><code>## Error: object &#39;regfit.full&#39; not found
+</code></pre>
+
+<pre><code class="r">coef(regfit.full, 10)
+</code></pre>
+
+<pre><code>## Error: object &#39;regfit.full&#39; not found
+</code></pre>
+
+<h2>Forward Stepwise Selection</h2>
+
+<p>Here we use the <code>regsubsets</code> function but specify the method=&ldquo;forward&rdquo; option:</p>
+
+<pre><code class="r">regfit.fwd = regsubsets(Salary ~ ., data = Hitters, nvmax = 19, method = &quot;forward&quot;)
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;regsubsets&quot;
+</code></pre>
+
+<pre><code class="r">summary(regfit.fwd)
+</code></pre>
+
+<pre><code>## Error: object &#39;regfit.fwd&#39; not found
+</code></pre>
+
+<pre><code class="r">plot(regfit.fwd, scale = &quot;Cp&quot;)
+</code></pre>
+
+<pre><code>## Error: object &#39;regfit.fwd&#39; not found
+</code></pre>
+
+<h2>Model Selection Using a Validation Set</h2>
+
+<p>Lets make a training and validation set, so that we can choose a good subset model.
+We will do it using a slightly different approach from what was done in the the book.</p>
+
+<pre><code class="r">dim(Hitters)
+</code></pre>
+
+<pre><code>## [1] 263  20
+</code></pre>
+
+<pre><code class="r">set.seed(1)
+train = sample(seq(263), 180, replace = FALSE)
+train
+</code></pre>
+
+<pre><code>##   [1]  70  98 150 237  53 232 243 170 161  16 259  45 173  97 192 124 178
+##  [18] 245  94 190 228  52 158  31  64  92   4  91 205  80 113 140 115  43
+##  [35] 244 153 181  25 163  93 184 144 174 122 117 251   6 104 241 149 102
+##  [52] 183 224 242  15  21  66 107 136  83 186  60 211  67 130 210  95 151
+##  [69]  17 256 207 162 200 239 236 168 249  73 222 177 234 199 203  59 235
+##  [86]  37 126  22 230 226  42  11 110 214 132 134  77  69 188 100 206  58
+## [103]  44 159 101  34 208  75 185 201 261 112  54  65  23   2 106 254 257
+## [120] 154 142  71 166 221 105  63 143  29 240 212 167 172   5  84 120 133
+## [137]  72 191 248 138 182  74 179 135  87 196 157 119  13  99 263 125 247
+## [154]  50  55  20  57   8  30 194 139 238  46  78  88  41   7  33 141  32
+## [171] 180 164 213  36 215  79 225 229 198  76
+</code></pre>
+
+<pre><code class="r">regfit.fwd = regsubsets(Salary ~ ., data = Hitters[train, ], nvmax = 19, method = &quot;forward&quot;)
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;regsubsets&quot;
+</code></pre>
+
+<p>Now we will make predictions on the observations not used for training. We know there are 19 models, so we set up some vectors to record the errors. We have to do a bit of work here, because there is no predict method for <code>regsubsets</code>.</p>
+
+<pre><code class="r">val.errors = rep(NA, 19)
+x.test = model.matrix(Salary ~ ., data = Hitters[-train, ])  # notice the -index!
+for (i in 1:19) {
+    coefi = coef(regfit.fwd, id = i)
+    pred = x.test[, names(coefi)] %*% coefi
+    val.errors[i] = mean((Hitters$Salary[-train] - pred)^2)
+}
+</code></pre>
+
+<pre><code>## Error: object &#39;regfit.fwd&#39; not found
+</code></pre>
+
+<pre><code class="r">plot(sqrt(val.errors), ylab = &quot;Root MSE&quot;, ylim = c(300, 400), pch = 19, type = &quot;b&quot;)
+points(sqrt(regfit.fwd$rss[-1]/180), col = &quot;blue&quot;, pch = 19, type = &quot;b&quot;)
+</code></pre>
+
+<pre><code>## Error: object &#39;regfit.fwd&#39; not found
+</code></pre>
+
+<pre><code class="r">legend(&quot;topright&quot;, legend = c(&quot;Training&quot;, &quot;Validation&quot;), col = c(&quot;blue&quot;, &quot;black&quot;), 
+    pch = 19)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-8"/> </p>
+
+<p>As we expect, the training error goes down monotonically as the model gets bigger, but not so 
+for the validation error.</p>
+
+<p>This was a little tedious - not having a predict method for <code>regsubsets</code>. So we will write one!</p>
+
+<pre><code class="r">predict.regsubsets = function(object, newdata, id, ...) {
+    form = as.formula(object$call[[2]])
+    mat = model.matrix(form, newdata)
+    coefi = coef(object, id = id)
+    mat[, names(coefi)] %*% coefi
+}
+</code></pre>
+
+<h2>Model Selection by Cross-Validation</h2>
+
+<p>We will do 10-fold cross-validation. Its really easy!</p>
+
+<pre><code class="r">set.seed(11)
+folds = sample(rep(1:10, length = nrow(Hitters)))
+folds
+</code></pre>
+
+<pre><code>##   [1]  3  1  4  4  7  7  3  5  5  2  5  2  8  3  3  3  9  2  9  8 10  5  8
+##  [24]  5  5  5  5 10 10  4  4  7  6  7  7  7  3  4  8  3  6  8 10  4  3  9
+##  [47]  9  3  4  9  8  7 10  6 10  3  6  9  4  2  8  2  5  6 10  7  2  8  8
+##  [70]  1  3  6  2  5  8  1  1  2  8  1 10  1  2  3  6  6  5  8  8 10  4  2
+##  [93]  6  1  7  4  8  3  7  8  7  1 10  1  6  2  9 10  1  7  7  4  7  4 10
+## [116]  3  6 10  6  6  9  8 10  6  7  9  6  7  1 10  2  2  5  9  9  6  1  1
+## [139]  2  9  4 10  5  3  7  7 10 10  9  3  3  7  3  1  4  6  6 10  4  9  9
+## [162]  1  3  6  8 10  8  5  4  5  6  2  9 10  3  7  7  6  6  2  3  2  4  4
+## [185]  4  4  8  2  3  5  9  9 10  2  1  3  9  6  7  3  1  9  4 10 10  8  8
+## [208]  8  2  5  9  8 10  5  8  2  4  1  4  4  5  5  2  1  9  5  2  9  9  5
+## [231]  3  2  1  9  1  7  2  5  8  1  1  7  6  6  4  5 10  5  7  4  8  6  9
+## [254]  1  2  5  7  1  3  1  3  1  2
+</code></pre>
+
+<pre><code class="r">table(folds)
+</code></pre>
+
+<pre><code>## folds
+##  1  2  3  4  5  6  7  8  9 10 
+## 27 27 27 26 26 26 26 26 26 26
+</code></pre>
+
+<pre><code class="r">cv.errors = matrix(NA, 10, 19)
+for (k in 1:10) {
+    best.fit = regsubsets(Salary ~ ., data = Hitters[folds != k, ], nvmax = 19, 
+        method = &quot;forward&quot;)
+    for (i in 1:19) {
+        pred = predict(best.fit, Hitters[folds == k, ], id = i)
+        cv.errors[k, i] = mean((Hitters$Salary[folds == k] - pred)^2)
+    }
+}
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;regsubsets&quot;
+</code></pre>
+
+<pre><code class="r">rmse.cv = sqrt(apply(cv.errors, 2, mean))
+plot(rmse.cv, pch = 19, type = &quot;b&quot;)
+</code></pre>
+
+<pre><code>## Warning: no non-missing arguments to min; returning Inf
+## Warning: no non-missing arguments to max; returning -Inf
+</code></pre>
+
+<pre><code>## Error: need finite &#39;ylim&#39; values
+</code></pre>
+
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfgAAAH4CAMAAACR9g9NAAAABlBMVEX9/v39/v17TDFfAAAAAnRSTlP/AOW3MEoAAAAJcEhZcwAACxIAAAsSAdLdfvwAAASISURBVHic7dExDQAACMAw8G8aGRxrFSzZLEnzHcAP46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzqVy+BudrHIxgAAAABJRU5ErkJggg==" alt="plot of chunk unnamed-chunk-10"/> </p>
+
+<h2>Ridge Regression and the Lasso</h2>
+
+<p>We will use the package <code>glmnet</code>, which does not use the model formula language, so we will set up an <code>x</code> and <code>y</code>.</p>
+
+<pre><code class="r">library(glmnet)
+</code></pre>
+
+<pre><code>## Error: there is no package called &#39;glmnet&#39;
+</code></pre>
+
+<pre><code class="r">x = model.matrix(Salary ~ . - 1, data = Hitters)
+y = Hitters$Salary
+</code></pre>
+
+<p>First we will fit a ridge-regression model. This is achieved by calling <code>glmnet</code> with <code>alpha=0</code> (see the helpfile). There is also a <code>cv.glmnet</code> function which will do the cross-validation for us. </p>
+
+<pre><code class="r">fit.ridge = glmnet(x, y, alpha = 0)
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;glmnet&quot;
+</code></pre>
+
+<pre><code class="r">plot(fit.ridge, xvar = &quot;lambda&quot;, label = TRUE)
+</code></pre>
+
+<pre><code>## Error: object &#39;fit.ridge&#39; not found
+</code></pre>
+
+<pre><code class="r">cv.ridge = cv.glmnet(x, y, alpha = 0)
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;cv.glmnet&quot;
+</code></pre>
+
+<pre><code class="r">plot(cv.ridge)
+</code></pre>
+
+<pre><code>## Error: object &#39;cv.ridge&#39; not found
+</code></pre>
+
+<p>Now we fit a lasso model; for this we use the default <code>alpha=1</code></p>
+
+<pre><code class="r">fit.lasso = glmnet(x, y)
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;glmnet&quot;
+</code></pre>
+
+<pre><code class="r">plot(fit.lasso, xvar = &quot;lambda&quot;, label = TRUE)
+</code></pre>
+
+<pre><code>## Error: object &#39;fit.lasso&#39; not found
+</code></pre>
+
+<pre><code class="r">cv.lasso = cv.glmnet(x, y)
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;cv.glmnet&quot;
+</code></pre>
+
+<pre><code class="r">plot(cv.lasso)
+</code></pre>
+
+<pre><code>## Error: object &#39;cv.lasso&#39; not found
+</code></pre>
+
+<pre><code class="r">coef(cv.lasso)
+</code></pre>
+
+<pre><code>## Error: object &#39;cv.lasso&#39; not found
+</code></pre>
+
+<p>Suppose we want to use our earlier train/validation division to select the <code>lambda</code> for the lasso.
+ This is easy to do.</p>
+
+<pre><code class="r">lasso.tr = glmnet(x[train, ], y[train])
+</code></pre>
+
+<pre><code>## Error: could not find function &quot;glmnet&quot;
+</code></pre>
+
+<pre><code class="r">lasso.tr
+</code></pre>
+
+<pre><code>## Error: object &#39;lasso.tr&#39; not found
+</code></pre>
+
+<pre><code class="r">pred = predict(lasso.tr, x[-train, ])
+</code></pre>
+
+<pre><code>## Error: object &#39;lasso.tr&#39; not found
+</code></pre>
+
+<pre><code class="r">dim(pred)
+</code></pre>
+
+<pre><code>## Error: object &#39;pred&#39; not found
+</code></pre>
+
+<pre><code class="r">rmse = sqrt(apply((y[-train] - pred)^2, 2, mean))
+</code></pre>
+
+<pre><code>## Error: object &#39;pred&#39; not found
+</code></pre>
+
+<pre><code class="r">plot(log(lasso.tr$lambda), rmse, type = &quot;b&quot;, xlab = &quot;Log(lambda)&quot;)
+</code></pre>
+
+<pre><code>## Error: object &#39;lasso.tr&#39; not found
+</code></pre>
+
+<pre><code class="r">lam.best = lasso.tr$lambda[order(rmse)[1]]
+</code></pre>
+
+<pre><code>## Error: object &#39;lasso.tr&#39; not found
+</code></pre>
+
+<pre><code class="r">lam.best
+</code></pre>
+
+<pre><code>## Error: object &#39;lam.best&#39; not found
+</code></pre>
+
+<pre><code class="r">coef(lasso.tr, s = lam.best)
+</code></pre>
+
+<pre><code>## Error: object &#39;lasso.tr&#39; not found
+</code></pre>
+
+</body>
+
+</html>
+
